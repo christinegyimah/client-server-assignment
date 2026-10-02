@@ -4,7 +4,7 @@ import random
 
 app=Flask(__name__)
 CORS(app,resources={
-    r"/api/*": {"origins": "http://127.0.0.1:5500"}
+    r"/api/*": {"origins": ["http://127.0.0.1:5500", "https://brave-bay-03c962010.5.azurestaticapps.net"]}
 })
 facts=["Programming uses 0’s and 1’s because computers operate on binary code, a base-2 numeral system. "
     "This system works because digital electronics, like transistors, have two states: on (1) and off (0). Binary forms the foundation of all computer operations.",
