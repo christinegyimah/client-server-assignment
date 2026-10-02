@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="style.css">
+        <script src="script.js" defer></script>
+        <title>Programming Fact & Study Encouragement</title>
+    </head>
+    <body>
+        <h1>Programming Fact & Study Encouragement</h1>
+    <div class="cards">
+        <section class="card">
+            <h2>Programming Fact</h2>
+            <p id="fact-text" class="result" aria-live="polite">Click the button to load a programming fact.</p>
+            <button id="fact-button">Get Programming Fact</button>
+        </section>
+
+        <section class="card">
+            <h2>Study Encouragement</h2>
+            <form id="study-form">
+                <label for="study-topic">What are you learning?</label>
+                <input type="text" id="study-topic" name="topic" required> 
+                <button type="submit">Get Encouragement</button>
+            </form>
+            <p id="study-response" class="result" aria-live="polite">Your encouragement will appear here.</p>
+        </section>
+    </div>
+    </body>
+</html>
