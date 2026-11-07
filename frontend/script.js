@@ -41,4 +41,35 @@ studyResponse.textContent= data.message;
 }
 });
 
+async function checkLoginStatus() {
+    const loginLink=document.getElementById("login-link");
+    const userGreeting=document.getElementById("user-greeting");
+    const logoutLink=document.getElementById("logout-link");
 
+    try{
+        const response=await fetch("/.auth/me");
+        if(!response.ok){
+            throw new Error("Could not check login status.")
+        }
+        const data=await response.json();
+        const user= data.clientPrincipal;
+
+        if(user && user.userRoles.includes("authenticated")){
+            const username=user.userDetails || "User";
+            userGreeting.textContent="Hello, " +username+ "!";
+            userGreeting.hidden=false;
+            loginLink.hidden=true;
+            logoutLink.hidden=false;
+        }else {
+            loginLink.hidden=false;
+            userGreeting.hidden=true;
+            logoutLink.hidden=true;
+        }
+    }catch (error){
+        console.error("Authentication error: ", error);
+        loginLink.hidden=false;
+        userGreeting.hidden=false;
+        logoutLink.hidden=true;
+    }
+}
+checkLoginStatus();
