@@ -1,0 +1,11 @@
+{
+    "routes":[
+        {
+            "route": "/api/*",
+            "allowedRoles": ["authenticated"]
+        }
+    ],
+    "platform":{
+        "apiRuntime": "python:3.10"
+    }
+}
