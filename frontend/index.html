@@ -50,5 +50,36 @@
         </form>
         <p id="profile-response" class="result" aria-live="polite" hidden></p>
     </section>
+    <section class="card" id="notes-card" hidden>
+        <h2>My Study Notes</h2>
+        <p>Keep track of what you're learning!</p>
+
+        <form id="notes-form">
+            <label for="note-topic">Study Topic</label>
+            <input
+                type="text"
+                id="note-topic"
+                name="topic"
+                placeholder="e.g. Python Programming"
+                maxlength="100"
+                required
+            >
+            <label for="note-content">My Notes</label>
+            <textarea
+                id="note-content"
+                name="note"
+                placeholder="Write your study notes here..."
+                maxlength="1000"
+                rows="4"
+                required
+            ></textarea>
+            <button type="submit">Save Notes</button>
+        </form>
+        <p id="notes-response" class="result" aria-live="polite" hidden></p>
+        <h3>Saved Notes</h3>
+        <div id="saved-notes" aria-live="polite">
+            <p>Your saved notes will appear here.</p>
+        </div>
+    </section>
     </body>
 </html>

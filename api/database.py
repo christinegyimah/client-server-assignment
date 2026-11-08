@@ -48,3 +48,38 @@ def save_display_name(user_id, display_name):
                     (user_id, display_name)
                 )
         conn.commit()
+
+def save_study_note(user_id, topic, note):
+    with get_connection() as conn:
+        with conn.cursor() as cursor:
+            cursor.execute(
+                """
+                INSERT INTO dbo.StudyNotes (user_id, topic, note)
+                VALUES (?,?,?)
+                """,
+                (user_id, topic, note)
+            )
+        conn.commit()
+
+def get_study_notes(user_id):
+    with get_connection() as conn:
+        with conn.sursor() as cursor:
+            cursor.execute(
+                """
+                SELECT id, topic, note, created_at
+                FROM dbo.StudyNotes
+                WHERE user_id=?
+                ORDER BY created_at DESC, id DESC
+                """,
+                (user_id,)
+            )
+            rows=cursor.fetchall()
+    return[
+        {
+            "id": row[0],
+            "topic": row[1],
+            "note": row[2],
+            "created_at": row[3].isoformat()
+        }
+        for rows in rows
+    ]

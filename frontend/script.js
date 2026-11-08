@@ -61,6 +61,7 @@ async function checkLoginStatus() {
             loginLink.hidden=true;
             logoutLink.hidden=false;
             profileCard.hidden=false;
+            notesCard.hidden=false;
 
             try {
                 const response=await fetch("/api/me");
@@ -81,6 +82,7 @@ async function checkLoginStatus() {
             userGreeting.hidden=true;
             logoutLink.hidden=true;
             profileCard.hidden=true;
+            notesCard.hidden=true;
         }
     }catch (error){
         console.error("Authentication error: ", error);
@@ -91,6 +93,8 @@ async function checkLoginStatus() {
     }
 }
 const profileCard=document.getElementById("profile-card");
+const notesCard= document.getElementById("notes-card");
+
 checkLoginStatus();
 
 const profileForm=document.getElementById("profile-form");
