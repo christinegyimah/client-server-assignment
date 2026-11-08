@@ -94,7 +94,7 @@ const profileCard=document.getElementById("profile-card");
 checkLoginStatus();
 
 const profileForm=document.getElementById("profile-form");
-const displayNameInput=document.getElementById("display_name");
+const displayNameInput=document.getElementById("display-name");
 const profileResponse=document.getElementById("profile-response");
 
 profileForm.addEventListener("submit", async function(event) {
