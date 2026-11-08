@@ -62,6 +62,7 @@ async function checkLoginStatus() {
             logoutLink.hidden=false;
             profileCard.hidden=false;
             notesCard.hidden=false;
+            loadStudyNotes();
 
             try {
                 const response=await fetch("/api/me");
@@ -135,3 +136,78 @@ profileForm.addEventListener("submit", async function(event) {
         profileResponse.textContent=error.message;
     }
 });
+
+const notesForm= document.getElementById("notes-form");
+const noteTopic= document.getElementById("note-topic");
+const noteContent= document.getElementById("note-content");
+const notesResponse= document.getElementById("notes-response");
+
+notesForm.addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    const topic=noteTopic.value.trim();
+    const note= noteContent.value.trim();
+
+    notesResponse.hidden=false;
+    if(
+        !topic || note || topic.length > 100 ||
+        note.length > 1000 || /[\u0000-\u001F\u007F]/.test(topic) ||
+        /[\u0000-\u0008\u000B\u000E-\u001F]/.test(note)
+    ){
+        notesResponse.textContent="Please enter a valid topic and note.";
+        return;
+    }
+    notesResponse.textContent="Saving your note...";
+
+    try{
+        const response=await fetch("/api/notes",{
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+            topic: topic,
+            note: note
+        })
+    });
+    if (!response.ok){
+        throw new Error("Could not save study note.");
+    }
+    notesResponse.textContent="Study note saved successfully!";
+    notesForm.reset();
+    await loadStudyNotes();
+} catch (error) {
+    notesResponse.textContent=error.message;
+}
+});
+
+async function loadStudyNotes(){
+    const savedNotes=document.getElementById("saved-notes");
+    savedNotes.textContent= "Loading your notes...";
+
+    try{
+        const response=await fetch("/api/notes");
+        if(!response.ok){
+            throw new Error("Could not retrieve study notes.");
+        }
+        const data= await response.json();
+
+        savedNotes.replaceChildren();
+        if( data.notes.length==0){
+            savedNotes.textContent="You haven't saved any notes yet.";
+            return;
+        }
+        data.notes.forEach(function(note){
+            const noteCard= document.createElement("div");
+            noteCard.className="saved-note";
+
+            const title= document.createElement("h4");
+            title.textContent=note.topic;
+
+            noteCard.appendChild(title);
+            noteCard.appendChild(content);
+
+            savedNotes.appendChild(noteCard);
+        });
+    } catch (error){
+        savedNotes.textContent= error.message;
+    }
+}
