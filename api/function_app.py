@@ -1,6 +1,7 @@
 import azure.functions as func
 import json
 import base64
+from database import get_connection
 
 app= func.FunctionApp(http_auth_level=func.AuthLevel.ANONYMOUS)
 
@@ -39,3 +40,26 @@ def get_current_user(req: func.HttpRequest) -> func.HttpResponse:
         mimetype="application/json",
         status_code=200
     )
+
+@app.route(route="db-check", methods=["GET"])
+def check_database(req: func.HttpRequest) -> func.HttpResponse:
+    try:
+        with get_connection() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute("SELECT 1")
+                result=cursor.fetchone()
+
+        if result and result[0]==1:
+            return func.HttpResponse(
+                "Database connection successful!",
+                status_code=200
+            )
+        return func.HttpResponse(
+            "Database check failed.",
+            status_code=503
+        )
+    except Exception:
+        return func.HttpResponse(
+            "Database connection unavailable.",
+            status_code=503
+        )
