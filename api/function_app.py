@@ -50,29 +50,6 @@ def get_current_user(req: func.HttpRequest) -> func.HttpResponse:
         status_code=200
     )
 
-@app.route(route="db-check", methods=["GET"])
-def check_database(req: func.HttpRequest) -> func.HttpResponse:
-    try:
-        with get_connection() as conn:
-            with conn.cursor() as cursor:
-                cursor.execute("SELECT 1")
-                result=cursor.fetchone()
-
-        if result and result[0]==1:
-            return func.HttpResponse(
-                "Database connection successful!",
-                status_code=200
-            )
-        return func.HttpResponse(
-            "Database check failed.",
-            status_code=503
-        )
-    except Exception as error:
-        return func.HttpResponse(
-            f"Database error type: {type(error).__name__}",
-            status_code=503
-        )
-
 @app.route(route="profile", methods=["POST"])
 def update_profile(req: func.HttpRequest) -> func.HttpResponse:
     encoded_user=req.headers.get("x-ms-client-principal")
@@ -178,7 +155,7 @@ def retrieve_notes(req: func.HttpRequest) -> func.HttpResponse:
         notes=get_study_notes(user["userId"])
     except Exception as error:
         return func.HttpResponse(
-            f"Study notes error type: {type(error).__name__}",
+            "Could not retrieve study notes.",
             status_code=503
         )
     return func.HttpResponse(
