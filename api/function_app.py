@@ -176,9 +176,9 @@ def retrieve_notes(req: func.HttpRequest) -> func.HttpResponse:
         )
     try:
         notes=get_study_notes(user["userId"])
-    except Exception:
+    except Exception as error:
         return func.HttpResponse(
-            "Could not retrieve study notes.",
+            f"Study notes error type: {type(error).__name__}",
             status_code=503
         )
     return func.HttpResponse(
