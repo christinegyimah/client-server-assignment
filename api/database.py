@@ -63,10 +63,10 @@ def save_study_note(user_id, topic, note):
 
 def get_study_notes(user_id):
     with get_connection() as conn:
-        with conn.sursor() as cursor:
+        with conn.cursor() as cursor:
             cursor.execute(
                 """
-                SELECT id, topic, note, created_at
+                SELECT id, topic, note, CONVERT(VARCHAR(33), created_at, 126) AS created_at
                 FROM dbo.StudyNotes
                 WHERE user_id=?
                 ORDER BY created_at DESC, id DESC
@@ -79,7 +79,7 @@ def get_study_notes(user_id):
             "id": row[0],
             "topic": row[1],
             "note": row[2],
-            "created_at": row[3].isoformat()
+            "created_at": row[3]
         }
-        for rows in rows
+        for row in rows
     ]
