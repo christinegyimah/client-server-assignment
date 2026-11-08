@@ -1,20 +1,23 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-import random
+from database import get_connection
 
 app=Flask(__name__)
 CORS(app,resources={
-    r"/api/*": {"origins": ["http://127.0.0.1:5500", "https://brave-bay-03c962010.5.azurestaticapps.net"]}
+    r"/api/*": {"origins": ["http://127.0.0.1:5500", "https://brave-bay-03c962010.5.azurestaticapps.net", "https://brave-bay-03c962010-1.centralus.5.azurestaticapps.net"]}
 })
-facts=["Programming uses 0’s and 1’s because computers operate on binary code, a base-2 numeral system. "
-    "This system works because digital electronics, like transistors, have two states: on (1) and off (0). Binary forms the foundation of all computer operations.",
-    "JavaScript was created in just 10 days by Brendan Eich in 1995. Despite its name, it has no real relation to Java.",
-    "The C language was so influential that it led to the creation of both Python and JavaScript, along with many other languages.",
-    "There is a programming language called “LOLCODE” designed to look like lolcats memes.",
-    "The most lines of code ever written for a single project is considered to be in Google’s repository, which held over 2 billion lines as of 2015."]
+
 @app.get("/api/fact")
 def get_fact():
-    return jsonify({"fact": random.choice(facts)})
+    with get_connection() as conn:
+        with conn.cursor() as cursor:
+            cursor.execute(
+                "SELECT TOP (1) fact FROM ProgrammingFacts ORDER BY NEWID()"
+            )
+            row = cursor.fetchone()
+    if row is None:
+        return jsonify({"error": "No facrs found."}), 404
+    return jsonify({"fact": row[0]})
 
 @app.post("/api/study")
 def study():

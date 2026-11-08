@@ -1,2 +1,5 @@
 Flask
 flask-cors
+gunicorn
+mssql-python
+python-dotenv
