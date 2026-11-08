@@ -4,7 +4,7 @@ from database import get_connection
 
 app=Flask(__name__)
 CORS(app,resources={
-    r"/api/*": {"origins": ["http://127.0.0.1:5500", "https://brave-bay-03c962010.5.azurestaticapps.net"]}
+    r"/api/*": {"origins": ["http://127.0.0.1:5500", "https://brave-bay-03c962010.5.azurestaticapps.net", "https://brave-bay-03c962010-1.centralus.5.azurestaticapps.net"]}
 })
 
 @app.get("/api/fact")
