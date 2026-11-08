@@ -5,7 +5,7 @@ import base64
 app= func.FunctionApp(http_auth_level=func.AuthLevel.ANONYMOUS)
 
 @app.route(route="me", methods=["GET"])
-def get_current_user(req: func.HTTPRequest) -> func.HttpResponse:
+def get_current_user(req: func.HttpRequest) -> func.HttpResponse:
     encoded_user=req.headers.get("x-ms-client-principal")
 
     if not encoded_user:
