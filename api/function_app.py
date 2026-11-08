@@ -58,8 +58,8 @@ def check_database(req: func.HttpRequest) -> func.HttpResponse:
             "Database check failed.",
             status_code=503
         )
-    except Exception:
+    except Exception as error:
         return func.HttpResponse(
-            "Database connection unavailable.",
+            f"Database error type: {type(error).__name__}",
             status_code=503
         )
