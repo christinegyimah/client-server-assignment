@@ -202,6 +202,8 @@ async function loadStudyNotes(){
             const title= document.createElement("h4");
             title.textContent=note.topic;
 
+            const content= document.createElement("p");
+            content.textContent=note.note;
             noteCard.appendChild(title);
             noteCard.appendChild(content);
 
