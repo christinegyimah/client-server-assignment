@@ -60,16 +60,74 @@ async function checkLoginStatus() {
             userGreeting.hidden=false;
             loginLink.hidden=true;
             logoutLink.hidden=false;
+            profileCard.hidden=false;
+
+            try {
+                const response=await fetch("/api/me");
+                if(!response.ok){
+                    throw new Error("Could not load profile.");
+                }
+                const profile = await response.json();
+
+                if (profile.displayName){
+                    userGreeting.textContent= "Hello, "+profile.displayName+"!";
+                    document.getElementById("display-name").value=profile.displayName;
+                }
+            }catch (error){
+                console.error("Could not load saved profile:", error);
+            }
         }else {
             loginLink.hidden=false;
             userGreeting.hidden=true;
             logoutLink.hidden=true;
+            profileCard.hidden=true;
         }
     }catch (error){
         console.error("Authentication error: ", error);
         loginLink.hidden=false;
         userGreeting.hidden=false;
         logoutLink.hidden=true;
+        profileCard.hidden=true;
     }
 }
+const profileCard=document.getElementById("profile-card");
 checkLoginStatus();
+
+const profileForm=document.getElementById("profile-form");
+const displayNameInput=document.getElementById("display_name");
+const profileResponse=document.getElementById("profile-response");
+
+profileForm.addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    const displayName=displayNameInput.value.trim();
+    profileResponse.hidden=false;
+
+    if (
+        displayName.length <1 ||
+        displayName.length >80 ||
+        /[\u0000-\u001F\u007F]/.test(displayName)
+    ){
+        profileResponse.textContent="Please enter a valid name.";
+        return;
+    }
+    profileResponse.textContent="Saving your profile...";
+
+    try{
+        const response=await fetch("/api/profile", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({displayName: displayName})
+        });
+        if(!response.ok){
+            throw new Error("Could not save your profile.")
+        }
+        const data=await response.json();
+        profileResponse.textContent="Profile saved successfully!";
+        document.getElementById("user-greeting").textContent= "Hello, "+data.displayName+"!";
+    }catch (error){
+        profileResponse.textContent=error.message;
+    }
+});

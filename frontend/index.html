@@ -31,5 +31,24 @@
             <p id="study-response" class="result" aria-live="polite">Your encouragement will appear here.</p>
         </section>
     </div>
+    <section class="card" id="profile-card" hidden>
+        <h2>My Profile</h2>
+        <p>Personalize your study experience.</p>
+
+        <form id="profile-form">
+            <label for="display-name">Preferred Display Name</label>
+            <input
+                type="text"
+                id="display-name"
+                name="displayName"
+                placeholder="Enter your preferred name"
+                maxlength="80"
+                autocomplete="nickname"
+                required>
+
+                <button type="submit">Save Profile</button>
+        </form>
+        <p id="profile-response" class="result" aria-live="polite" hidden></p>
+    </section>
     </body>
 </html>
