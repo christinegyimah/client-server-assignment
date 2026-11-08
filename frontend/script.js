@@ -150,7 +150,7 @@ notesForm.addEventListener("submit", async function(event) {
 
     notesResponse.hidden=false;
     if(
-        !topic || note || topic.length > 100 ||
+        !topic || !note || topic.length > 100 ||
         note.length > 1000 || /[\u0000-\u001F\u007F]/.test(topic) ||
         /[\u0000-\u0008\u000B\u000E-\u001F]/.test(note)
     ){
